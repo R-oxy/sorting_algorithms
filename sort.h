@@ -7,6 +7,9 @@
 #include <stdbool.h>
 #include <string.h>
 
+#define INCREMENT 1
+#define DECREMENT -1
+
 /**
  * struct listint_s - Doubly linked list node
  *
@@ -32,6 +35,8 @@ int lomuto_partition(int *array, int low, int high, size_t size);
 void swap(int *array, int i, int j);
 void shell_sort(int *array, size_t size);
 void cocktail_sort_list(listint_t **list);
+void swap_list_nodes(listint_t **list, listint_t *node);
+listint_t *get_last_dlistint(listint_t *head);
 void counting_sort(int *array, size_t size);
 void merge_sort(int *array, size_t size);
 void heap_sort(int *array, size_t size);

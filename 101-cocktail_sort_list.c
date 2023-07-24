@@ -1,0 +1,89 @@
+#include "sort.h"
+
+/**
+  * cocktail_sort_list - Sorts a doubly linked list
+  * of integers in ascending order using the
+  * Cocktail Shaker sort algorithm.
+  * @list: The doubly linked list to apply the cocktail sort
+  *
+  * Return: Nothing!
+  */
+void cocktail_sort_list(listint_t **list)
+{
+	listint_t *current = NULL, *left_limit = NULL, *right_limit = NULL;
+	int cycle_type = INCREMENT;
+
+	if (!list || !(*list) || !(*list)->next)
+		return;
+
+	current = *list;
+	left_limit = current;
+	right_limit = get_last_dlistint(*list);
+
+	while (left_limit != right_limit)
+	{
+		if (current->n == current->next->n)
+			break;
+		else if (current->n > current->next->n && cycle_type == INCREMENT)
+			swap_list_nodes(list, current), print_list(*list);
+		else if (current->next->n < current->n && cycle_type == DECREMENT)
+			swap_list_nodes(list, current), current = current->prev, print_list(*list);
+		else if (cycle_type == INCREMENT)
+			current = current->next;
+		else if (cycle_type == DECREMENT)
+			current = current->prev;
+
+		if (cycle_type == DECREMENT && current->next == left_limit)
+		{
+			cycle_type = INCREMENT;
+			current = current->next;
+		}
+
+		if (cycle_type == INCREMENT && current->prev == right_limit)
+		{
+			right_limit = right_limit->prev;
+			cycle_type = DECREMENT;
+			current = current->prev;
+		}
+	}
+}
+
+/**
+  * swap_list_nodes - Swap two nodes of a doubly linked list
+  * @list: The double linked lists that contains the nodes
+  * @node: The node to swap with the next node
+  *
+  * Return: Nothing!
+  */
+void swap_list_nodes(listint_t **list, listint_t *node)
+{
+	node->next->prev = node->prev;
+
+	if (node->next->prev)
+		node->prev->next = node->next;
+	else
+		*list = node->next;
+
+	node->prev = node->next;
+	node->next = node->next->next;
+	node->prev->next = node;
+
+	if (node->next)
+		node->next->prev = node;
+}
+
+/**
+  * get_last_dlistint - Counts the number of elements in a doubly linked list
+  * @head: The double linked list to count
+  *
+  * Return: Last element of the doubly linked list
+  */
+listint_t *get_last_dlistint(listint_t *head)
+{
+	listint_t *current = head;
+
+	while (current->next != NULL)
+		current = current->next;
+
+	return (current);
+}
